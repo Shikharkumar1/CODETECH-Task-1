@@ -1,0 +1,281 @@
+/*GoogleplayEDA*/
+/* LINK FOR THE COLAB NOTEBOOK*/
+https://colab.research.google.com/drive/1woSMfwJmPZmlousMdMqer6ALjXY6UPtU?usp=sharing
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+
+x=pd.read_csv("/content/Google-Playstore.csv")
+<ipython-input-6-db78163f0fe6>:1: DtypeWarning: Columns (8,20,21,22) have mixed types. Specify dtype option on import or set low_memory=False.
+  x=pd.read_csv("/content/Google-Playstore.csv")
+
+
+x
+
+
+
+
+x.info()
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 401418 entries, 0 to 401417
+Data columns (total 24 columns):
+ #   Column             Non-Null Count   Dtype  
+---  ------             --------------   -----  
+ 0   App Name           401417 non-null  object 
+ 1   App Id             401418 non-null  object 
+ 2   Category           401418 non-null  object 
+ 3   Rating             397451 non-null  float64
+ 4   Rating Count       397451 non-null  float64
+ 5   Installs           401390 non-null  object 
+ 6   Minimum Installs   401390 non-null  float64
+ 7   Maximum Installs   401417 non-null  float64
+ 8   Free               401417 non-null  object 
+ 9   Price              401417 non-null  float64
+ 10  Currency           401374 non-null  object 
+ 11  Size               401393 non-null  object 
+ 12  Minimum Android    400271 non-null  object 
+ 13  Developer Id       401415 non-null  object 
+ 14  Developer Website  269557 non-null  object 
+ 15  Developer Email    401414 non-null  object 
+ 16  Released           389149 non-null  object 
+ 17  Last Updated       401417 non-null  object 
+ 18  Content Rating     401417 non-null  object 
+ 19  Privacy Policy     328731 non-null  object 
+ 20  Ad Supported       401417 non-null  object 
+ 21  In App Purchases   401417 non-null  object 
+ 22  Editors Choice     401417 non-null  object 
+ 23  Scraped Time       401417 non-null  object 
+dtypes: float64(5), object(19)
+memory usage: 73.5+ MB
+
+
+#description of the dataset
+x.describe()
+
+x.head()
+
+x.tail()
+
+x.isnull().sum()
+
+
+x.drop(columns=['Rating Count','Minimum Installs','Maximum Installs','Currency','Developer Id','Developer Website','Last Updated','Ad Supported','Scraped Time','Content Rating'],inplace=True)
+
+
+x.info()
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 401418 entries, 0 to 401417
+Data columns (total 14 columns):
+ #   Column            Non-Null Count   Dtype  
+---  ------            --------------   -----  
+ 0   App Name          401417 non-null  object 
+ 1   App Id            401418 non-null  object 
+ 2   Category          401418 non-null  object 
+ 3   Rating            397451 non-null  float64
+ 4   Installs          401390 non-null  object 
+ 5   Free              401417 non-null  object 
+ 6   Price             401417 non-null  float64
+ 7   Size              401393 non-null  object 
+ 8   Minimum Android   400271 non-null  object 
+ 9   Developer Email   401414 non-null  object 
+ 10  Released          389149 non-null  object 
+ 11  Privacy Policy    328731 non-null  object 
+ 12  In App Purchases  401417 non-null  object 
+ 13  Editors Choice    401417 non-null  object 
+dtypes: float64(2), object(12)
+memory usage: 42.9+ MB
+
+
+x.rename(columns={'installs':'Downloads'},inplace=True)
+
+
+x.info()
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 401418 entries, 0 to 401417
+Data columns (total 14 columns):
+ #   Column            Non-Null Count   Dtype  
+---  ------            --------------   -----  
+ 0   App Name          401417 non-null  object 
+ 1   App Id            401418 non-null  object 
+ 2   Category          401418 non-null  object 
+ 3   Rating            397451 non-null  float64
+ 4   Installs          401390 non-null  object 
+ 5   Free              401417 non-null  object 
+ 6   Price             401417 non-null  float64
+ 7   Size              401393 non-null  object 
+ 8   Minimum Android   400271 non-null  object 
+ 9   Developer Email   401414 non-null  object 
+ 10  Released          389149 non-null  object 
+ 11  Privacy Policy    328731 non-null  object 
+ 12  In App Purchases  401417 non-null  object 
+ 13  Editors Choice    401417 non-null  object 
+dtypes: float64(2), object(12)
+memory usage: 42.9+ MB
+
+
+x.rename(columns={'Installs':'Downloads'},inplace=True)
+
+
+x.info()
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 401418 entries, 0 to 401417
+Data columns (total 14 columns):
+ #   Column            Non-Null Count   Dtype  
+---  ------            --------------   -----  
+ 0   App Name          401417 non-null  object 
+ 1   App Id            401418 non-null  object 
+ 2   Category          401418 non-null  object 
+ 3   Rating            397451 non-null  float64
+ 4   Downloads         401390 non-null  object 
+ 5   Free              401417 non-null  object 
+ 6   Price             401417 non-null  float64
+ 7   Size              401393 non-null  object 
+ 8   Minimum Android   400271 non-null  object 
+ 9   Developer Email   401414 non-null  object 
+ 10  Released          389149 non-null  object 
+ 11  Privacy Policy    328731 non-null  object 
+ 12  In App Purchases  401417 non-null  object 
+ 13  Editors Choice    401417 non-null  object 
+dtypes: float64(2), object(12)
+memory usage: 42.9+ MB
+
+
+x.columns
+Index(['App Name', 'App Id', 'Category', 'Rating', 'Downloads', 'Free',
+       'Price', 'Size', 'Minimum Android', 'Developer Email', 'Released',
+       'Privacy Policy', 'In App Purchases', 'Editors Choice'],
+      dtype='object')
+
+
+x['Price'].max()
+399.99
+
+
+plt.hist(x['Rating'], bins=20, edgecolor='black')
+plt.title('Distribution of App Ratings')
+plt.xlabel('Rating')
+plt.ylabel('Number of Apps')
+plt.show()
+
+
+
+
+
+category_counts = x['Category'].value_counts()
+top_10 = category_counts.head(10)
+x['Top 10 Categories'] = x['Category'].apply(lambda x: x if x in top_10.index else 'Other')
+new_category_counts = x['Top 10 Categories'].value_counts()
+plt.figure(figsize=(8, 8))
+new_category_counts.plot(kind='pie', autopct='%1.1f%%', startangle=140)
+plt.title('Top 10 Categories and Others')
+plt.ylabel('')
+plt.show()
+
+
+
+free_paid_counts=x['Free'].value_counts()
+plt.figure(figsize=(8,8))
+free_paid_counts.plot(kind='pie' , autopct='%1.1f%%',startangle=140)
+plt.xlabel("FREE vs PAID")
+plt.show()
+
+
+
+else:
+    print("Column 'Ad Supported' not found in the DataFrame.")
+Column 'Ad Supported' not found in the DataFrame.
+
+
+
+# Extract year from 'Released' column
+
+x['Year Released'] = pd.to_datetime(x['Released'], errors='coerce').dt.year
+
+# Plot histogram for release years
+
+plt.figure(figsize=(10, 6))
+plt.hist(x['Year Released'].dropna(), bins=range(int(x['Year Released'].min()), int(x['Year Released'].max()) + 1), edgecolor='black')
+plt.title('Number of Apps Released by Year')
+plt.xlabel('Year')
+plt.ylabel('Number of Apps')
+plt.show()
+
+
+ratings= x['Rating'].to_numpy()
+median_rating=np.median(ratings)
+print(f"Median rating:{median_rating}")
+
+Median rating:nan
+
+
+x['Rating'] = pd.to_numeric(x['Rating'], errors='coerce')
+x = x.dropna(subset=['Rating'])
+ratings = x['Rating'].to_numpy()
+mean_ratings = np.mean(ratings)
+median_ratings = np.median(ratings)
+std_dev_ratings = np.std(ratings)
+total_ratings = np.sum(ratings)
+min_ratings = np.min(ratings)
+max_ratings = np.max(ratings)
+print(f"Mean Rating: {mean_ratings:.2f}")
+print(f"Median Rating: {median_ratings:.2f}")
+print(f"Standard Deviation of Ratings: {std_dev_ratings:.2f}")
+print(f"Total Ratings: {total_ratings:.2f}")
+print(f"Minimum Rating: {min_ratings:.2f}")
+print(f"Maximum Rating: {max_ratings:.2f}")
+
+
+
+Mean Rating: 2.20
+Median Rating: 2.90
+Standard Deviation of Ratings: 2.11
+Total Ratings: 875214.30
+Minimum Rating: 0.00
+Maximum Rating: 5.00
+
+
+plt.figure(figsize=(10, 5))
+
+# Rating
+plt.subplot(1, 3, 1)
+sns.boxplot(x['Rating'])
+plt.title('Boxplot of Rating')
+
+
+correlation_matrix = x[['Rating', ]].corr()
+plt.figure(figsize=(10, 6))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f')
+plt.title('Correlation Matrix')
+plt.show()
+
+
+
+print(x.columns)
+
+# Convert 'Rating' and 'Reviews' to numeric
+x['Rating'] = pd.to_numeric(x['Rating'], errors='coerce')
+
+
+# Drop rows with missing values in 'Rating' or 'Reviews'
+x.dropna(subset=['Rating' ], inplace=True)
+
+# Create a correlation matrix
+corr_matrix = x[['Rating']].corr()
+
+# Set up the matplotlib figure
+plt.figure(figsize=(8, 6))
+
+# Create the heatmap
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt='.2f', linewidths=.5)
+
+# Add title
+plt.title('Correlation Heatmap of Rating ')
+
+# Show the plot
+plt.show()
+plt.show()
+
+
